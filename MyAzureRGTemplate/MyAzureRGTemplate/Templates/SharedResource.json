@@ -1,0 +1,107 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "AsiaHKVnetLocation": {
+            "type": "string",
+            "defaultValue": "East Asia",
+            "allowedValues": [
+                "East US",
+                "West US",
+                "West Europe",
+                "East Asia",
+                "South East Asia"
+            ]
+        },
+        "AsiaJWVNetLocation": {
+            "type": "string",
+            "defaultValue": "East Asia",
+            "allowedValues": [
+                "East US",
+                "West US",
+                "West Europe",
+                "East Asia",
+                "South East Asia"
+            ]
+        }
+    },
+    "variables": {
+        "AsiaHKVnetPrefix": "10.0.0.0/16",
+        "AsiaHKVnetSubnet1Name": "DMZ",
+        "AsiaHKVnetSubnet1Prefix": "10.0.0.0/24",
+        "AsiaHKVnetSubnet2Name": "Internal",
+        "AsiaHKVnetSubnet2Prefix": "10.0.1.0/24",
+        "AsiaJWVNetPrefix": "10.1.0.0/16",
+        "AsiaJWVNetSubnet1Name": "DMZ",
+        "AsiaJWVNetSubnet1Prefix": "10.1.0.0/24",
+        "AsiaJWVNetSubnet2Name": "Internal",
+        "AsiaJWVNetSubnet2Prefix": "10.1.1.0/24"
+    },
+    "resources": [
+        {
+            "name": "AsiaHKVnet",
+            "type": "Microsoft.Network/virtualNetworks",
+            "location": "[parameters('AsiaHKVnetLocation')]",
+            "apiVersion": "2015-05-01-preview",
+            "dependsOn": [ ],
+            "tags": {
+                "displayName": "AsiaHKVnet"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[variables('AsiaHKVnetPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[variables('AsiaHKVnetSubnet1Name')]",
+                        "properties": {
+                            "addressPrefix": "[variables('AsiaHKVnetSubnet1Prefix')]"
+                        }
+                    },
+                    {
+                        "name": "[variables('AsiaHKVnetSubnet2Name')]",
+                        "properties": {
+                            "addressPrefix": "[variables('AsiaHKVnetSubnet2Prefix')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AsiaJWVNet",
+            "type": "Microsoft.Network/virtualNetworks",
+            "location": "[parameters('AsiaJWVNetLocation')]",
+            "apiVersion": "2015-05-01-preview",
+            "dependsOn": [ ],
+            "tags": {
+                "displayName": "AsiaJWVNet"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[variables('AsiaJWVNetPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[variables('AsiaJWVNetSubnet1Name')]",
+                        "properties": {
+                            "addressPrefix": "[variables('AsiaJWVNetSubnet1Prefix')]"
+                        }
+                    },
+                    {
+                        "name": "[variables('AsiaJWVNetSubnet2Name')]",
+                        "properties": {
+                            "addressPrefix": "[variables('AsiaJWVNetSubnet2Prefix')]"
+                        }
+                    }
+                ]
+            }
+        }
+
+    ],
+    "outputs": {
+    }
+}

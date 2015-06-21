@@ -1,0 +1,2 @@
+C:\Users\julee\Documents\GitHub\MyAzureRGTemplate\MyAzureRGTemplate\MyAzureRGTemplate\bin\Debug\Scripts\Deploy-AzureResourceGroup.ps1
+C:\Users\julee\Documents\GitHub\MyAzureRGTemplate\MyAzureRGTemplate\MyAzureRGTemplate\bin\Debug\Templates\DeploymentTemplate.json
