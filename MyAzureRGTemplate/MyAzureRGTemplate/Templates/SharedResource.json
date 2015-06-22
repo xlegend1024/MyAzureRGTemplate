@@ -15,14 +15,7 @@
         },
         "AsiaJWVNetLocation": {
             "type": "string",
-            "defaultValue": "East Asia",
-            "allowedValues": [
-                "East US",
-                "West US",
-                "West Europe",
-                "East Asia",
-                "South East Asia"
-            ]
+            "defaultValue": "Japan West"
         }
     },
     "variables": {
