@@ -18,9 +18,5 @@ $TemplateFile = [System.IO.Path]::Combine($PSScriptRoot, $TemplateFile)
 $TemplateParametersFile = [System.IO.Path]::Combine($PSScriptRoot, $TemplateParametersFile)
 # Create or update the resource group using the specified template file and template parameters file
 Switch-AzureMode AzureResourceManager
-New-AzureResourceGroup -Name $ResourceGroupName `
-                       -Location $ResourceGroupLocation `
-                       -TemplateFile $TemplateFile `
-                       -TemplateParameterFile $TemplateParametersFile `
-                        @OptionalParameters `
+Remove-AzureResourceGroup -Name $ResourceGroupName `
                         -Force -Verbose
