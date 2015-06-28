@@ -1,7 +1,7 @@
 ﻿#Requires -Version 3.0
 
 Param(
-  [string] $ResourceGroupLocation = 'East Asia',
+  [string] $ResourceGroupLocation = 'Japan West',
   [string] $ResourceGroupName = 'SharedResource',
   [switch] $UploadArtifacts,
   [string] $StorageAccountName, 

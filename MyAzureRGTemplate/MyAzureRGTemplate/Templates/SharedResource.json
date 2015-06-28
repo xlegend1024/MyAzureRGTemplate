@@ -16,6 +16,79 @@
         "AsiaJWVNetLocation": {
             "type": "string",
             "defaultValue": "Japan West"
+        },
+        "USEastVNetLocation": {
+            "type": "string",
+            "defaultValue": "East US",
+            "allowedValues": [
+                "East US",
+                "West US",
+                "West Europe",
+                "East Asia",
+                "South East Asia"
+            ]
+        },
+        "juleeasiahkstorageName": {
+            "type": "string"
+        },
+        "juleeasiahkstorageType": {
+            "type": "string",
+            "defaultValue": "Standard_LRS",
+            "allowedValues": [
+                "Standard_LRS",
+                "Standard_GRS",
+                "Standard_ZRS"
+            ]
+        },
+        "juleeasiahkstorageLocation": {
+            "type": "string",
+            "defaultValue": "East Asia",
+            "allowedValues": [
+                "East US",
+                "West US",
+                "West Europe",
+                "East Asia",
+                "South East Asia"
+            ]
+        },
+        "juleejapanweststorageName": {
+            "type": "string"
+        },
+        "juleejapanweststorageType": {
+            "type": "string",
+            "defaultValue": "Standard_LRS",
+            "allowedValues": [
+                "Standard_LRS",
+                "Standard_GRS",
+                "Standard_ZRS"
+            ]
+        },
+        "juleejapanweststorageLocation": {
+            "type": "string",
+            "defaultValue": "Japan West"
+        },
+        "juleeuseaststorageName": {
+            "type": "string"
+        },
+        "juleeuseaststorageType": {
+            "type": "string",
+            "defaultValue": "Standard_LRS",
+            "allowedValues": [
+                "Standard_LRS",
+                "Standard_GRS",
+                "Standard_ZRS"
+            ]
+        },
+        "juleeuseaststorageLocation": {
+            "type": "string",
+            "defaultValue": "West US",
+            "allowedValues": [
+                "East US",
+                "West US",
+                "West Europe",
+                "East Asia",
+                "South East Asia"
+            ]
         }
     },
     "variables": {
@@ -28,7 +101,12 @@
         "AsiaJWVNetSubnet1Name": "DMZ",
         "AsiaJWVNetSubnet1Prefix": "10.1.0.0/24",
         "AsiaJWVNetSubnet2Name": "Internal",
-        "AsiaJWVNetSubnet2Prefix": "10.1.1.0/24"
+        "AsiaJWVNetSubnet2Prefix": "10.1.1.0/24",
+        "USEastVNetPrefix": "10.2.0.0/16",
+        "USEastVNetSubnet1Name": "DMZ",
+        "USEastVNetSubnet1Prefix": "10.2.0.0/24",
+        "USEastVNetSubnet2Name": "Internal",
+        "USEastVNetSubnet2Prefix": "10.2.1.0/24"
     },
     "resources": [
         {
@@ -91,6 +169,76 @@
                         }
                     }
                 ]
+            }
+        },
+        {
+            "name": "USEastVNet",
+            "type": "Microsoft.Network/virtualNetworks",
+            "location": "[parameters('USEastVNetLocation')]",
+            "apiVersion": "2015-05-01-preview",
+            "dependsOn": [ ],
+            "tags": {
+                "displayName": "USEastVNet"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[variables('USEastVNetPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[variables('USEastVNetSubnet1Name')]",
+                        "properties": {
+                            "addressPrefix": "[variables('USEastVNetSubnet1Prefix')]"
+                        }
+                    },
+                    {
+                        "name": "[variables('USEastVNetSubnet2Name')]",
+                        "properties": {
+                            "addressPrefix": "[variables('USEastVNetSubnet2Prefix')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[parameters('juleeasiahkstorageName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "location": "[parameters('juleeasiahkstorageLocation')]",
+            "apiVersion": "2015-05-01-preview",
+            "dependsOn": [ ],
+            "tags": {
+                "displayName": "juleeasiahkstorage"
+            },
+            "properties": {
+                "accountType": "[parameters('juleeasiahkstorageType')]"
+            }
+        },
+        {
+            "name": "[parameters('juleejapanweststorageName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "location": "[parameters('juleejapanweststorageLocation')]",
+            "apiVersion": "2015-05-01-preview",
+            "dependsOn": [ ],
+            "tags": {
+                "displayName": "juleejapanweststorage"
+            },
+            "properties": {
+                "accountType": "[parameters('juleejapanweststorageType')]"
+            }
+        },
+        {
+            "name": "[parameters('juleeuseaststorageName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "location": "[parameters('juleeuseaststorageLocation')]",
+            "apiVersion": "2015-05-01-preview",
+            "dependsOn": [ ],
+            "tags": {
+                "displayName": "juleeuseaststorage"
+            },
+            "properties": {
+                "accountType": "[parameters('juleeuseaststorageType')]"
             }
         }
 

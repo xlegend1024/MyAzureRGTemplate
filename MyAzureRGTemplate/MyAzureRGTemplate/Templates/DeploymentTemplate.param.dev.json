@@ -2,5 +2,9 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "_artifactsLocation": { "value": "https://raw.githubusercontent.com" },
+        "shared_resourceTemplateFile": { "value": "eissi/MyAzureRGTemplate/master/MyAzureRGTemplate/MyAzureRGTemplate/Templates/SharedResource.json" },
+        "shared_resourceTemplateparmFile": { "value": "eissi/MyAzureRGTemplate/master/MyAzureRGTemplate/MyAzureRGTemplate/Templates/SharedResource.param.dev.json" },
+        "_artifactsLocationSasToken": {"value": ""}
     }
 }
