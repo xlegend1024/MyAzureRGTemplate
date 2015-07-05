@@ -14,7 +14,7 @@
                 "USEastVnet"
             ],
             "defaultValue": "AsiaJWVnet"
-        }
+        },
         "Subnet Name": {
             "type": "string",
             "allowedValues": [
