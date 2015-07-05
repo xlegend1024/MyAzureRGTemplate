@@ -37,7 +37,7 @@
     <None Include="Scripts\Remove-Availability.ps1" />
     <None Include="Scripts\Remove-SharedResource.ps1" />
     <None Include="Scripts\Deploy-SharedResource.ps1" />
-    <None Include="Templates\AvailabilityTemplate.param.dev - Copy.json" />
+    <None Include="Templates\AvailabilityTemplate.param.dev.json" />
     <None Include="Templates\SharedResource.param.dev.json" />
     <None Include="Templates\AvailabilitySetTemplate.param.jw.json" />
   </ItemGroup>
