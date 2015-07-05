@@ -2,11 +2,10 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        
-        "Number of VMs": 3,
-        "Virtual Network": "AsiaJWVNet",
-        "Subnet Name": "DMZ",
-        "Location": "Japan West"
-        }
+        "Virtual Network": { "value": "AsiaJWVNet" },
+        "Subnet Name": {"value": "DMZ"},
+        "Location": {"value": "Japan West"},
+        "Number of VMs": {"value": 3}
+    }
     }
 }
