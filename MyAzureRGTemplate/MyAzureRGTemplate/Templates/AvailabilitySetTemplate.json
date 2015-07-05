@@ -2,15 +2,71 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-  
-
-
-
+        "Number of VMs": {
+            "type": "int",
+            "defaultValue": 2
+        },
+        "Virtual Network": {
+            "type": "string",
+            "allowedValues": [
+                "AsiaJWVNet",
+                "AsiaHKVnet",
+                "USEastVnet"
+            ],
+            "defaultValue": "AsiaJWVnet"
+        }
+        "Subnet Name": {
+            "type": "string",
+            "allowedValues": [
+                "DMZ",
+                "Internal"
+            ],
+            "defaultValue": "DMZ"
+        },
+        "Location": {
+            "type": "string",
+            "allowedValues": [
+                "Japan West",
+                "East Asia",
+                "US East"
+            ],
+            "defaultValue": "Japan West"
+        }
     },
     "variables": {
+        "NIC-AS-VMsVnetID": "[resourceId('SharedResource','Microsoft.Network/virtualNetworks', parameters('Virtual Network'))]",
+        "NIC-AS-VMsSubnetRef": "[concat(variables('NIC-AS-VMsVnetID'),'/subnets/', parameters('Subnet Name'))]"
 
     },
     "resources": [
+
+        {
+            "name": "[concat(parameters('NIC-AS-VMsName'),'-',[copyindex(1)])]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "location": "[parameters('Location')]",
+            "apiVersion": "2015-05-01-preview",
+            "tags": {
+                "displayName": "NIC-AS-VMs"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[variables('NIC-AS-VMsSubnetRef')]"
+                            }
+                        }
+                    }
+                ]
+            }
+            "copy": {
+                "name": "NIC copy",
+                "count": "[parameters('Number of VMs')]"
+            }
+
+        }
 
     ],
     "outputs": {

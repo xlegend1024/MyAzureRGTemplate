@@ -3,6 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         
-       
+        "Number of VMs": "3",
+        "Virtual Network": "AsiaJWVNet",
+        "Subnet Name": "DMZ",
+        "Location": "Japan West"
+        }
     }
 }
