@@ -1,0 +1,77 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+
+
+
+    },
+    "variables": {
+        "asiahklivetestVnetID": "[resourceId('SharedResource','Microsoft.Network/virtualNetworks', 'AsiaHKVnet')]",
+        "asiahklivetestSubnetRef": "[concat(variables('asiahklivetestVnetID'),'/subnets/', 'DMZ')]",
+        "asiajwlivetestvnetid": "[resourceId('SharedResource','Microsoft.Network/virtualNetworks', 'AsiaJWVnet')]",
+        "asiajwlivetestSubnetRef": "[concat(variables('asiajwlivetestVnetID'),'/subnets/', 'DMZ')]",
+    },
+    "resources": [
+
+        {
+            "name": "NIC-asiajwlivetest01",
+            "type": "Microsoft.Network/networkInterfaces",
+            "location": "Japan West",
+            "apiVersion": "2015-05-01-preview",
+            "tags": {
+                "displayName": "NIC-asiajwlivetest01"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[variables('asiajwlivetestSubnetRef')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "NIC-asiajwlivetest02",
+            "type": "Microsoft.Network/networkInterfaces",
+            "location": "Japan West",
+            "apiVersion": "2015-05-01-preview",
+            "tags": {
+                "displayName": "NIC-asiajwlivetest02"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[variables('asiajwlivetestSubnetRef')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AS-asiajwlivetest",
+            "type": "Microsoft.Compute/availabilitySets",
+            "location": "Japan West",
+            "apiVersion": "2015-05-01-preview",
+            "dependsOn": [ ],
+            "tags": {
+                "displayName": "AS-asiajwlivetest"
+            }
+        }
+
+
+
+    ],
+    "outputs": {
+    }
+}

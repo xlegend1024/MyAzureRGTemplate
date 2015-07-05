@@ -2,12 +2,12 @@
 
 Param(
   [string] $ResourceGroupLocation = 'Japan West',
-  [string] $ResourceGroupName = 'MyAzureRGTemplate',
+  [string] $ResourceGroupName = 'AvailabilityTest',
   [switch] $UploadArtifacts,
   [string] $StorageAccountName, 
   [string] $StorageContainerName = $ResourceGroupName.ToLowerInvariant() + '-stageartifacts',
-  [string] $TemplateFile = '..\Templates\DeploymentTemplate.json',
-  [string] $TemplateParametersFile = '..\Templates\DeploymentTemplate.param.dev.json',
+  [string] $TemplateFile = '..\Templates\AvailabilityTemplate.json',
+  [string] $TemplateParametersFile = '..\Templates\AvailabilityTemplate.param.dev.json',
   [string] $ArtifactStagingDirectory = '..\bin\Debug\Artifacts',
   [string] $AzCopyPath = '..\Tools\AzCopy.exe'
 )

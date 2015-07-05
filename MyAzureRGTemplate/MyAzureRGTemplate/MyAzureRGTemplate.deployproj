@@ -31,12 +31,15 @@
     <None Include="Deployment.targets">
       <Visible>False</Visible>
     </None>
-    <Content Include="Scripts\Deploy-AzureResourceGroup.ps1" />
-    <Content Include="Templates\DeploymentTemplate.json" />
+    <Content Include="Scripts\Deploy-Availability.ps1" />
+    <Content Include="Templates\AvailabilitySetTemplate.json" />
+    <Content Include="Templates\AvailabilityTemplate.json" />
+    <None Include="Scripts\Remove-Availability.ps1" />
     <None Include="Scripts\Remove-SharedResource.ps1" />
     <None Include="Scripts\Deploy-SharedResource.ps1" />
+    <None Include="Templates\AvailabilityTemplate.param.dev - Copy.json" />
     <None Include="Templates\SharedResource.param.dev.json" />
-    <None Include="Templates\DeploymentTemplate.param.dev.json" />
+    <None Include="Templates\AvailabilitySetTemplate.param.jw.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Templates\SharedResource.json" />
