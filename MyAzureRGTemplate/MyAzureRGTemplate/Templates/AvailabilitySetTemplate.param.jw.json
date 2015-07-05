@@ -5,6 +5,6 @@
         "Virtual Network": { "value": "AsiaJWVNet" },
         "Subnet Name": {"value": "DMZ"},
         "Location": {"value": "Japan West"},
-        "Number of VMs": {"value": "3"}
+        "Number of VMs": {"value": 3}
     }
 }
