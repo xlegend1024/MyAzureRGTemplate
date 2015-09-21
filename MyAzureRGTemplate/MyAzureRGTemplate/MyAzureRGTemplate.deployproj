@@ -31,13 +31,13 @@
     <None Include="Deployment.targets">
       <Visible>False</Visible>
     </None>
-    <Content Include="Scripts\Deploy-Availability.ps1" />
+    <Content Include="Scripts\Deploy-MyConsoles.ps1" />
+    <Content Include="Scripts\Deploy-AvailabilitySet-debug.ps1" />
     <Content Include="Templates\AvailabilitySetTemplate.json" />
-    <Content Include="Templates\AvailabilityTemplate.json" />
-    <None Include="Scripts\Remove-Availability.ps1" />
     <None Include="Scripts\Remove-SharedResource.ps1" />
     <None Include="Scripts\Deploy-SharedResource.ps1" />
-    <None Include="Templates\AvailabilityTemplate.param.dev.json" />
+    <None Include="Templates\MyConsoleVMs.param.json" />
+    <None Include="Templates\MyConsoleVMs.json" />
     <None Include="Templates\SharedResource.param.dev.json" />
     <None Include="Templates\AvailabilitySetTemplate.param.jw.json" />
   </ItemGroup>

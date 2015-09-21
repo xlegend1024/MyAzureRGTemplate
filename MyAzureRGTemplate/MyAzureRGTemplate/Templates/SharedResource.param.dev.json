@@ -2,9 +2,9 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "AsiaHKVnetLocation": { "value": "East Asia" },
-        "juleeasiahkstorageName": { "value": "juleeeastasiastorage" },
-        "juleejapanweststorageName": { "value": "juleejapanweststorage" },
-        "juleeuseaststorageName": {"value": "juleeuseaststorage"}
+        "juleeasiahkstorageName": { "value": "asiahkstoragejulee" },
+        "juleejapanweststorageName": { "value": "asiajwstoragejulee" },
+        "juleeuseaststorageName": { "value": "useaststoragejulee" },
+        "juleejapaneaststorageName": { "value": "asiajestoragejulee" }
     }
 }
