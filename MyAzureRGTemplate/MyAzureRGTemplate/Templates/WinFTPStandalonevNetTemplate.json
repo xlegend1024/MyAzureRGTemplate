@@ -147,7 +147,8 @@
       "apiVersion": "2015-05-01-preview",
       "dependsOn": [
         "[concat('Microsoft.Storage/storageAccounts/', parameters('ftpvmstorageName'))]",
-        "[concat('Microsoft.Network/networkInterfaces/', variables('FTPNic1Name'))]"
+        "[concat('Microsoft.Network/networkInterfaces/', variables('FTPNic1Name'))]",
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('ftpipaddressName'))]"
       ],
       "tags": {
         "displayName": "ftpvm"
@@ -183,11 +184,7 @@
               "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('FTPNic1Name'))]"
             }
           ]
-        },
-        "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', variables('FTPNic1Name'))]",
-        "[concat('Microsoft.Network/publicIPAddresses/', variables('ftpipaddressName'))]"
-      ]
+        }
       }
     }
 
