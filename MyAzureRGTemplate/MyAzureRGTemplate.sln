@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "MyAzureRGTemplate", "MyAzureRGTemplate\MyAzureRGTemplate.deployproj", "{83D72C6F-7BAD-4982-AA9B-11A767EC720A}"
 EndProject
