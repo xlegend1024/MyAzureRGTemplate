@@ -1,0 +1,597 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_ITSM_APPVM_W01_adminPassword": {
+            "defaultValue": null,
+            "type": "SecureString"
+        },
+        "availabilitySets_ITSM_AVset_name": {
+            "defaultValue": "ITSM-AVset",
+            "type": "String"
+        },
+        "virtualMachines_ITSM_APPVM_W01_name": {
+            "defaultValue": "ITSM-APPVM-W01",
+            "type": "String"
+        },
+        "loadBalancers_ITSM_LB01_name": {
+            "defaultValue": "ITSM-LB01",
+            "type": "String"
+        },
+        "networkInterfaces_itsm_appvm_w01_name": {
+            "defaultValue": "itsm-appvm-w01-nic",
+            "type": "String"
+        },
+        "networkSecurityGroups_APP_NSG_name": {
+            "defaultValue": "APP_NSG",
+            "type": "String"
+        },
+        "networkSecurityGroups_DNS_NSG_name": {
+            "defaultValue": "DNS_NSG",
+            "type": "String"
+        },
+        "publicIPAddresses_itsm_lb01_pip_name": {
+            "defaultValue": "itsm-lb01-pip",
+            "type": "String"
+        },
+        "publicIPAddresses_vnet_gw_dongbu_share_pip_name": {
+            "defaultValue": "vnet-gw-dongbu-share-pip",
+            "type": "String"
+        },
+        "virtualNetworks_dongbu_share_vnet_name": {
+            "defaultValue": "dongbu-share-vnet",
+            "type": "String"
+        },
+        "storageAccounts_dbgsharecommonstorage01_name": {
+            "defaultValue": "dbgsharestorage01",
+            "type": "String"
+        },
+        "loadBalancers_ITSM_LB01_id": {
+            "defaultValue": "/subscriptions/85a0a9bd-691a-4baa-913a-c89bd847378b/resourceGroups/DONGBU-Share/providers/Microsoft.Network/loadBalancers/ITSM-LB01/frontendIPConfigurations/LoadBalancerFrontEnd",
+            "type": "String"
+        },
+        "loadBalancers_ITSM_LB01_id_1": {
+            "defaultValue": "/subscriptions/85a0a9bd-691a-4baa-913a-c89bd847378b/resourceGroups/DONGBU-Share/providers/Microsoft.Network/loadBalancers/ITSM-LB01/backendAddressPools/lbbackpool",
+            "type": "String"
+        },
+        "loadBalancers_ITSM_LB01_id_2": {
+            "defaultValue": "/subscriptions/85a0a9bd-691a-4baa-913a-c89bd847378b/resourceGroups/DONGBU-Share/providers/Microsoft.Network/loadBalancers/ITSM-LB01/probes/lbprob",
+            "type": "String"
+        },
+        "loadBalancers_ITSM_LB01_id_3": {
+            "defaultValue": "/subscriptions/85a0a9bd-691a-4baa-913a-c89bd847378b/resourceGroups/DONGBU-Share/providers/Microsoft.Network/loadBalancers/ITSM-LB01/frontendIPConfigurations/LoadBalancerFrontEnd",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "리소스 '/subscriptions/85a0a9bd-691a-4baa-913a-c89bd847378b/resourceGroups/DONGBU-Share/providers/Microsoft.Compute/availabilitySets/APP-AVset'에서 일반화했습니다.",
+            "type": "Microsoft.Compute/availabilitySets",
+            "name": "[parameters('availabilitySets_ITSM_AVset_name')]",
+            "apiVersion": "2015-06-15",
+            "location": "koreacentral",
+            "tags": {},
+            "properties": {
+                "platformUpdateDomainCount": 5,
+                "platformFaultDomainCount": 3
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "comments": "리소스 '/subscriptions/85a0a9bd-691a-4baa-913a-c89bd847378b/resourceGroups/DONGBU-Share/providers/Microsoft.Compute/virtualMachines/ITSM-APPVM-W01'에서 일반화했습니다.",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('virtualMachines_ITSM_APPVM_W01_name')]",
+            "apiVersion": "2015-06-15",
+            "location": "koreacentral",
+            "properties": {
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_ITSM_AVset_name'))]"
+                },
+                "hardwareProfile": {
+                    "vmSize": "Standard_A2_v2"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2016-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "[parameters('virtualMachines_ITSM_APPVM_W01_name')]",
+                        "createOption": "FromImage",
+                        "vhd": {
+                            "uri": "[concat('https', '://', parameters('storageAccounts_dbgsharecommonstorage01_name'), '.blob.core.windows.net', concat('/vhds/', parameters('virtualMachines_ITSM_APPVM_W01_name'),'20170117085810.vhd'))]"
+                        },
+                        "caching": "ReadWrite"
+                    },
+                    "dataDisks": [
+                        {
+                            "lun": 0,
+                            "name": "[concat(parameters('virtualMachines_ITSM_APPVM_W01_name'),'-DATA01')]",
+                            "createOption": "Attach",
+                            "vhd": {
+                                "uri": "[concat('https', '://', parameters('storageAccounts_dbgsharecommonstorage01_name'), '.blob.core.windows.net', concat('/vhds/', parameters('virtualMachines_ITSM_APPVM_W01_name'),'-DATA01.vhd'))]"
+                            },
+                            "caching": "None"
+                        }
+                    ]
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_ITSM_APPVM_W01_name')]",
+                    "adminUsername": "dbincrnd",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true
+                    },
+                    "secrets": [],
+                    "adminPassword": "[parameters('virtualMachines_ITSM_APPVM_W01_adminPassword')]"
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_itsm_appvm_w01_name'))]"
+                        }
+                    ]
+                }
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_ITSM_AVset_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_dbgsharecommonstorage01_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_itsm_appvm_w01_name'))]"
+            ]
+        },
+        {
+            "comments": "리소스 '/subscriptions/85a0a9bd-691a-4baa-913a-c89bd847378b/resourceGroups/DONGBU-Share/providers/Microsoft.Network/loadBalancers/ITSM-LB01'에서 일반화했습니다.",
+            "type": "Microsoft.Network/loadBalancers",
+            "name": "[parameters('loadBalancers_ITSM_LB01_name')]",
+            "apiVersion": "2016-03-30",
+            "location": "koreacentral",
+            "properties": {
+                "frontendIPConfigurations": [
+                    {
+                        "name": "LoadBalancerFrontEnd",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_itsm_lb01_pip_name'))]"
+                            }
+                        }
+                    }
+                ],
+                "backendAddressPools": [
+                    {
+                        "name": "lbbackpool"
+                    }
+                ],
+                "loadBalancingRules": [
+                    {
+                        "name": "lbrule",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[parameters('loadBalancers_ITSM_LB01_id')]"
+                            },
+                            "frontendPort": 80,
+                            "backendPort": 18080,
+                            "enableFloatingIP": false,
+                            "idleTimeoutInMinutes": 4,
+                            "protocol": "Tcp",
+                            "loadDistribution": "Default",
+                            "backendAddressPool": {
+                                "id": "[parameters('loadBalancers_ITSM_LB01_id_1')]"
+                            },
+                            "probe": {
+                                "id": "[parameters('loadBalancers_ITSM_LB01_id_2')]"
+                            }
+                        }
+                    }
+                ],
+                "probes": [
+                    {
+                        "name": "lbprob",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "port": 18080,
+                            "intervalInSeconds": 5,
+                            "numberOfProbes": 2
+                        }
+                    }
+                ],
+                "inboundNatRules": [
+                    {
+                        "name": "nat-rdp-itsm01",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[parameters('loadBalancers_ITSM_LB01_id_3')]"
+                            },
+                            "frontendPort": 10001,
+                            "backendPort": 3389,
+                            "protocol": "Tcp"
+                        }
+                    }
+                ],
+                "outboundNatRules": [],
+                "inboundNatPools": []
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_itsm_lb01_pip_name'))]"
+            ]
+        },
+        {
+            "comments": "리소스 '/subscriptions/85a0a9bd-691a-4baa-913a-c89bd847378b/resourceGroups/DONGBU-Share/providers/Microsoft.Network/networkInterfaces/itsm-appvm-w01794'에서 일반화했습니다.",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_itsm_appvm_w01_name')]",
+            "apiVersion": "2016-03-30",
+            "location": "koreacentral",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAddress": "10.40.20.133",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_dongbu_share_vnet_name')), '/subnets/AppSubnet')]"
+                            },
+                            "loadBalancerBackendAddressPools": [
+                                {
+                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_ITSM_LB01_name')), '/backendAddressPools/lbbackpool')]"
+                                }
+                            ],
+                            "loadBalancerInboundNatRules": [
+                                {
+                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_ITSM_LB01_name')), '/inboundNatRules/nat-rdp-itsm01')]"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableIPForwarding": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_APP_NSG_name'))]"
+                }
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_dongbu_share_vnet_name'))]",
+                "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_ITSM_LB01_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_APP_NSG_name'))]"
+            ]
+        },
+        {
+            "comments": "리소스 '/subscriptions/85a0a9bd-691a-4baa-913a-c89bd847378b/resourceGroups/DONGBU-Share/providers/Microsoft.Network/networkSecurityGroups/APP_NSG'에서 일반화했습니다.",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('networkSecurityGroups_APP_NSG_name')]",
+            "apiVersion": "2016-03-30",
+            "location": "koreacentral",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "Allow_DNS",
+                        "properties": {
+                            "description": "Allow DNS Subnet",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "443",
+                            "sourceAddressPrefix": "10.40.20.0/25",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Block_RDP_Internet",
+                        "properties": {
+                            "description": "Block RDP",
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "3389",
+                            "sourceAddressPrefix": "Internet",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 101,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Block_SSH_Internet",
+                        "properties": {
+                            "description": "Block SSH",
+                            "protocol": "tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "Internet",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 102,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Block_Internet_Outbound",
+                        "properties": {
+                            "description": "Block Internet",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "Internet",
+                            "access": "Allow",
+                            "priority": 200,
+                            "direction": "Outbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-FTP-21",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "21",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 112,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-FTP-1035",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "1035",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 122,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-FTP-1036",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "1036",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 132,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-FTP-1037",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "1037",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 142,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-FTP-1038",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "1038",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 152,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-FTP-1039",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "1039",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 162,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-FTP-1040",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "1040",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 172,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-HTTP-18080",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "18080",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 182,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "Allow-HTTP-80",
+                        "properties": {
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "80",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 192,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "comments": "리소스 '/subscriptions/85a0a9bd-691a-4baa-913a-c89bd847378b/resourceGroups/DONGBU-Share/providers/Microsoft.Network/networkSecurityGroups/DNS_NSG'에서 일반화했습니다.",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('networkSecurityGroups_DNS_NSG_name')]",
+            "apiVersion": "2016-03-30",
+            "location": "koreacentral",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "rdp_rule",
+                        "properties": {
+                            "description": "Allow RDP",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "3389",
+                            "sourceAddressPrefix": "Internet",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "ssh_rule",
+                        "properties": {
+                            "description": "Allow SSH",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "Internet",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 101,
+                            "direction": "Inbound"
+                        }
+                    },
+                    {
+                        "name": "web_rule",
+                        "properties": {
+                            "description": "Allow WEB",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "80",
+                            "sourceAddressPrefix": "Internet",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 102,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "comments": "리소스 '/subscriptions/85a0a9bd-691a-4baa-913a-c89bd847378b/resourceGroups/DONGBU-Share/providers/Microsoft.Network/publicIPAddresses/itsm-lb01-pip'에서 일반화했습니다.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[parameters('publicIPAddresses_itsm_lb01_pip_name')]",
+            "apiVersion": "2016-03-30",
+            "location": "koreacentral",
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "comments": "리소스 '/subscriptions/85a0a9bd-691a-4baa-913a-c89bd847378b/resourceGroups/DONGBU-Share/providers/Microsoft.Network/publicIPAddresses/vnet-gw-dongbu-share-pip'에서 일반화했습니다.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[parameters('publicIPAddresses_vnet_gw_dongbu_share_pip_name')]",
+            "apiVersion": "2016-03-30",
+            "location": "koreacentral",
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "comments": "리소스 '/subscriptions/85a0a9bd-691a-4baa-913a-c89bd847378b/resourceGroups/DONGBU-Share/providers/Microsoft.Network/virtualNetworks/dongbu-share-vnet'에서 일반화했습니다.",
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('virtualNetworks_dongbu_share_vnet_name')]",
+            "apiVersion": "2016-03-30",
+            "location": "koreacentral",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.40.20.0/24"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "DnsSubnet",
+                        "properties": {
+                            "addressPrefix": "10.40.20.0/25",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_DNS_NSG_name'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "AppSubnet",
+                        "properties": {
+                            "addressPrefix": "10.40.20.128/26",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_APP_NSG_name'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "GatewaySubnet",
+                        "properties": {
+                            "addressPrefix": "10.40.20.192/27"
+                        }
+                    }
+                ]
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_DNS_NSG_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_APP_NSG_name'))]"
+            ]
+        },
+        {
+            "comments": "리소스 '/subscriptions/85a0a9bd-691a-4baa-913a-c89bd847378b/resourceGroups/dongbu-share/providers/Microsoft.Storage/storageAccounts/dbgsharecommonstorage01'에서 일반화했습니다.",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[parameters('storageAccounts_dbgsharecommonstorage01_name')]",
+            "apiVersion": "2016-01-01",
+            "location": "koreacentral",
+            "tags": {},
+            "properties": {},
+            "resources": [],
+            "dependsOn": []
+        }
+    ]
+}
