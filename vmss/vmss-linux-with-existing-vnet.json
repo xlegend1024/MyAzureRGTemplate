@@ -166,31 +166,6 @@
         ],
         "inboundNatPools": [
           {
-            "name": "natRDPpool",
-            "properties": {
-              "frontendIPConfiguration": {
-                "id": "[concat(resourceId('Microsoft.Network/loadBalancers',concat(resourcegroup().name,parameters('vmssname'))),'/frontendIPConfigurations/loadBalancerFrontEnd')]"
-              },
-              "protocol": "tcp",
-              "frontendPortRangeStart": 50000,
-              "frontendPortRangeEnd": 50499,
-              "backendPort": 3389
-            }
-          },
-          {
-            "name": "natWEBpool",
-            "properties": {
-              "frontendIPConfiguration": {
-                "id": "[concat(resourceId('Microsoft.Network/loadBalancers',concat(resourcegroup().name,parameters('vmssname'))),'/frontendIPConfigurations/loadBalancerFrontEnd')]"
-              },
-              "protocol": "tcp",
-              "frontendPortRangeStart": 8080,
-              "frontendPortRangeEnd": 8800,
-              "backendPort": 8080
-            }
-          },
-
-          {
             "name": "natSSHpool",
             "properties": {
               "frontendIPConfiguration": {
@@ -200,6 +175,30 @@
               "frontendPortRangeStart": 2200,
               "frontendPortRangeEnd": 2300,
               "backendPort": 22
+            }
+          },
+          {
+            "name": "port25000",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers',concat(resourcegroup().name,parameters('vmssname'))),'/frontendIPConfigurations/loadBalancerFrontEnd')]"
+              },
+              "protocol": "tcp",
+              "frontendPortRangeStart": 25000,
+              "frontendPortRangeEnd": 25100,
+              "backendPort": 25000
+            }
+          },
+          {
+            "name": "port26000",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers',concat(resourcegroup().name,parameters('vmssname'))),'/frontendIPConfigurations/loadBalancerFrontEnd')]"
+              },
+              "protocol": "tcp",
+              "frontendPortRangeStart": 26000,
+              "frontendPortRangeEnd": 26100,
+              "backendPort": 26000
             }
           }
         ]
@@ -261,10 +260,10 @@
                         ],
                         "loadBalancerInboundNatPools": [
                           {
-                            "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', concat(resourcegroup().name,parameters('vmssname')), '/inboundNatPools/', 'natRDPpool')]"
+                            "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', concat(resourcegroup().name,parameters('vmssname')), '/inboundNatPools/', 'port25000')]"
                           },
                           {
-                            "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', concat(resourcegroup().name,parameters('vmssname')), '/inboundNatPools/', 'natWEBpool')]"
+                            "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', concat(resourcegroup().name,parameters('vmssname')), '/inboundNatPools/', 'port26000')]"
                           },
                           {
                             "id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', concat(resourcegroup().name,parameters('vmssname')), '/inboundNatPools/', 'natSSHpool')]"
