@@ -3,148 +3,148 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "clusterLocation": {
-      "type": "string",
+      "type": "String",
       "metadata": {
         "description": "Location of the Cluster"
       }
     },
     "clusterName": {
-      "type": "string",
       "defaultValue": "sfcluster",
+      "type": "String",
       "metadata": {
         "description": "Name of your cluster - Between 3 and 23 characters. Letters and numbers only"
       }
     },
     "adminUserName": {
-      "type": "string",
+      "type": "String",
       "metadata": {
         "description": "Remote desktop user Id"
       }
     },
     "adminPassword": {
-      "type": "securestring",
+      "type": "SecureString",
       "metadata": {
         "description": "Remote desktop user password. Must be a strong password"
       }
     },
     "vmImagePublisher": {
-      "type": "string",
       "defaultValue": "MicrosoftWindowsServer",
+      "type": "String",
       "metadata": {
         "description": "VM image Publisher"
       }
     },
     "vmImageOffer": {
-      "type": "string",
       "defaultValue": "WindowsServer",
+      "type": "String",
       "metadata": {
         "description": "VM image offer"
       }
     },
     "vmImageSku": {
-      "type": "string",
-      "defaultValue": "2016-Datacenter",
+      "defaultValue": "2012-R2-Datacenter",
+      "type": "String",
       "metadata": {
         "description": "VM image SKU"
       }
     },
     "vmImageVersion": {
-      "type": "string",
       "defaultValue": "latest",
+      "type": "String",
       "metadata": {
         "description": "VM image version"
       }
     },
     "loadBalancedAppPort1": {
-      "type": "int",
       "defaultValue": 80,
+      "type": "Int",
       "metadata": {
         "description": "Input endpoint1 for the application to use. Replace it with what your application uses"
       }
     },
     "loadBalancedAppPort2": {
-      "type": "int",
       "defaultValue": 8081,
+      "type": "Int",
       "metadata": {
         "description": "Input endpoint2 for the application to use. Replace it with what your application uses"
       }
     },
     "certificateStoreValue": {
-      "type": "string",
+      "defaultValue": "My",
       "allowedValues": [
         "My"
       ],
-      "defaultValue": "My",
+      "type": "String",
       "metadata": {
         "description": "The store name where the cert will be deployed in the virtual machine"
       }
     },
     "certificateThumbprint": {
-      "type": "string",
+      "type": "String",
       "metadata": {
         "description": "Certificate Thumbprint"
       }
     },
     "sourceVaultValue": {
-      "type": "string",
+      "type": "String",
       "metadata": {
         "description": "Resource Id of the key vault, is should be in the format of /subscriptions/<Sub ID>/resourceGroups/<Resource group name>/providers/Microsoft.KeyVault/vaults/<vault name>"
       }
     },
     "certificateUrlValue": {
-      "type": "string",
+      "type": "String",
       "metadata": {
         "description": "Refers to the location URL in your key vault where the certificate was uploaded, it is should be in the format of https://<name of the vault>.vault.azure.net:443/secrets/<exact location>"
       }
     },
     "clusterProtectionLevel": {
-      "type": "string",
+      "defaultValue": "EncryptAndSign",
       "allowedValues": [
         "None",
         "Sign",
         "EncryptAndSign"
       ],
-      "defaultValue": "EncryptAndSign",
+      "type": "String",
       "metadata": {
         "description": "Protection level.Three values are allowed - EncryptAndSign, Sign, None. It is best to keep the default of EncryptAndSign, unless you have a need not to"
       }
     },
     "storageAccountType": {
-      "type": "string",
+      "defaultValue": "Standard_LRS",
       "allowedValues": [
         "Standard_LRS",
         "Standard_GRS"
       ],
-      "defaultValue": "Standard_LRS",
+      "type": "String",
       "metadata": {
         "description": "Replication option for the VM image storage account"
       }
     },
     "supportLogStorageAccountType": {
-      "type": "string",
+      "defaultValue": "Standard_LRS",
       "allowedValues": [
         "Standard_LRS",
         "Standard_GRS"
       ],
-      "defaultValue": "Standard_LRS",
+      "type": "String",
       "metadata": {
         "description": "Replication option for the support log storage account"
       }
     },
     "applicationDiagnosticsStorageAccountType": {
-      "type": "string",
+      "defaultValue": "Standard_LRS",
       "allowedValues": [
         "Standard_LRS",
         "Standard_GRS"
       ],
-      "defaultValue": "Standard_LRS",
+      "type": "String",
       "metadata": {
         "description": "Replication option for the application diagnostics storage account"
       }
     },
     "nt0InstanceCount": {
-      "type": "int",
       "defaultValue": 5,
+      "type": "Int",
       "metadata": {
         "description": "Instance count for node type"
       }
@@ -158,7 +158,7 @@
     "dnsName": "[parameters('clusterName')]",
     "vmStorageAccountName": "[toLower(concat(uniqueString(resourceGroup().id), '1' ))]",
     "vmName": "vm",
-    "publicIPAddressName": "PublicIPjuleesf",
+    "publicIPAddressName": "PublicIP-VM",
     "publicIPAddressType": "Dynamic",
     "vmStorageAccountContainerName": "vhds",
     "virtualNetworkName": "VNet",
@@ -205,42 +205,46 @@
   },
   "resources": [
     {
-      "apiVersion": "[variables('storageApiVersion')]",
       "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('supportLogStorageAccountName')]",
-      "location": "[variables('computeLocation')]",
-      "dependsOn": [],
-      "properties": {},
-      "kind": "Storage",
       "sku": {
         "name": "[parameters('supportLogStorageAccountType')]"
       },
+      "kind": "Storage",
+      "name": "[variables('supportLogStorageAccountName')]",
+      "apiVersion": "[variables('storageApiVersion')]",
+      "location": "[variables('computeLocation')]",
       "tags": {
         "resourceType": "Service Fabric",
         "clusterName": "[parameters('clusterName')]"
-      }
+      },
+      "properties": {},
+      "dependsOn": []
     },
     {
-      "apiVersion": "[variables('storageApiVersion')]",
       "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('applicationDiagnosticsStorageAccountName')]",
-      "location": "[variables('computeLocation')]",
-      "dependsOn": [],
-      "properties": {},
-      "kind": "Storage",
       "sku": {
         "name": "[parameters('applicationDiagnosticsStorageAccountType')]"
       },
+      "kind": "Storage",
+      "name": "[variables('applicationDiagnosticsStorageAccountName')]",
+      "apiVersion": "[variables('storageApiVersion')]",
+      "location": "[variables('computeLocation')]",
       "tags": {
         "resourceType": "Service Fabric",
         "clusterName": "[parameters('clusterName')]"
-      }
+      },
+      "properties": {},
+      "dependsOn": []
     },
     {
-      "apiVersion": "[variables('vNetApiVersion')]",
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[variables('virtualNetworkName')]",
+      "apiVersion": "[variables('vNetApiVersion')]",
       "location": "[variables('computeLocation')]",
+      "tags": {
+        "resourceType": "Service Fabric",
+        "clusterName": "[parameters('clusterName')]"
+      },
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
@@ -255,36 +259,33 @@
             }
           }
         ]
-      },
-      "tags": {
-        "resourceType": "Service Fabric",
-        "clusterName": "[parameters('clusterName')]"
       }
     },
     {
-      "apiVersion": "[variables('publicIPApiVersion')]",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[concat(variables('lbIPName'),'-','0')]",
+      "apiVersion": "[variables('publicIPApiVersion')]",
       "location": "[variables('computeLocation')]",
+      "tags": {
+        "resourceType": "Service Fabric",
+        "clusterName": "[parameters('clusterName')]"
+      },
       "properties": {
         "dnsSettings": {
           "domainNameLabel": "[variables('dnsName')]"
         },
         "publicIPAllocationMethod": "Dynamic"
-      },
-      "tags": {
-        "resourceType": "Service Fabric",
-        "clusterName": "[parameters('clusterName')]"
       }
     },
     {
-      "apiVersion": "[variables('lbApiVersion')]",
       "type": "Microsoft.Network/loadBalancers",
       "name": "[concat('LB','-', parameters('clusterName'),'-',variables('vmNodeType0Name'))]",
+      "apiVersion": "[variables('lbApiVersion')]",
       "location": "[variables('computeLocation')]",
-      "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses/',concat(variables('lbIPName'),'-','0'))]"
-      ],
+      "tags": {
+        "resourceType": "Service Fabric",
+        "clusterName": "[parameters('clusterName')]"
+      },
       "properties": {
         "frontendIPConfigurations": [
           {
@@ -433,47 +434,44 @@
           }
         ]
       },
-      "tags": {
-        "resourceType": "Service Fabric",
-        "clusterName": "[parameters('clusterName')]"
-      }
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/',concat(variables('lbIPName'),'-','0'))]"
+      ]
     },
     {
-      "apiVersion": "[variables('storageApiVersion')]",
       "type": "Microsoft.Storage/storageAccounts",
+      "sku": {
+        "name": "[parameters('storageAccountType')]"
+      },
+      "kind": "Storage",
       "name": "[variables('uniqueStringArray0')[copyIndex()]]",
+      "apiVersion": "[variables('storageApiVersion')]",
       "location": "[variables('computeLocation')]",
-      "dependsOn": [],
-      "properties": {},
       "copy": {
         "name": "storageLoop",
         "count": 5
       },
-      "kind": "Storage",
-      "sku": {
-        "name": "[parameters('storageAccountType')]"
-      },
       "tags": {
         "resourceType": "Service Fabric",
         "clusterName": "[parameters('clusterName')]"
-      }
+      },
+      "properties": {},
+      "dependsOn": []
     },
     {
-      "apiVersion": "[variables('vmssApiVersion')]",
       "type": "Microsoft.Compute/virtualMachineScaleSets",
+      "sku": {
+        "name": "[variables('vmNodeType0Size')]",
+        "capacity": "[parameters('nt0InstanceCount')]",
+        "tier": "Standard"
+      },
       "name": "[variables('vmNodeType0Name')]",
+      "apiVersion": "[variables('vmssApiVersion')]",
       "location": "[variables('computeLocation')]",
-      "dependsOn": [
-        "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray0')[0])]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray0')[1])]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray0')[2])]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray0')[3])]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray0')[4])]",
-        "[concat('Microsoft.Network/loadBalancers/', concat('LB','-', parameters('clusterName'),'-',variables('vmNodeType0Name')))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('supportLogStorageAccountName'))]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('applicationDiagnosticsStorageAccountName'))]"
-      ],
+      "tags": {
+        "resourceType": "Service Fabric",
+        "clusterName": "[parameters('clusterName')]"
+      },
       "properties": {
         "overprovision": "[variables('overProvision')]",
         "upgradePolicy": {
@@ -553,7 +551,6 @@
                           ]
                         }
                       },
-
                       "SinksConfig": {
                         "Sink": [
                           {
@@ -561,9 +558,10 @@
                             "ApplicationInsights": "[parameters('applicationInsightsKey')]"
                           }
                         ]
-                      
-                    }
-                  },
+
+                      }
+
+                    },
                     "StorageAccount": "[variables('applicationDiagnosticsStorageAccountName')]"
                   },
                   "typeHandlerVersion": "1.5"
@@ -641,24 +639,27 @@
           }
         }
       },
-      "sku": {
-        "name": "[variables('vmNodeType0Size')]",
-        "capacity": "[parameters('nt0InstanceCount')]",
-        "tier": "Standard"
-      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray0')[0])]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray0')[1])]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray0')[2])]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray0')[3])]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray0')[4])]",
+        "[concat('Microsoft.Network/loadBalancers/', concat('LB','-', parameters('clusterName'),'-',variables('vmNodeType0Name')))]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('supportLogStorageAccountName'))]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('applicationDiagnosticsStorageAccountName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ServiceFabric/clusters",
+      "name": "[parameters('clusterName')]",
+      "apiVersion": "2016-09-01",
+      "location": "[parameters('clusterLocation')]",
       "tags": {
         "resourceType": "Service Fabric",
         "clusterName": "[parameters('clusterName')]"
-      }
-    },
-    {
-      "apiVersion": "2016-09-01",
-      "type": "Microsoft.ServiceFabric/clusters",
-      "name": "[parameters('clusterName')]",
-      "location": "[parameters('clusterLocation')]",
-      "dependsOn": [
-        "[concat('Microsoft.Storage/storageAccounts/', variables('supportLogStorageAccountName'))]"
-      ],
+      },
       "properties": {
         "certificate": {
           "thumbprint": "[parameters('certificateThumbprint')]",
@@ -705,20 +706,19 @@
           }
         ],
         "provisioningState": "Default",
-        "reliabilityLevel": "Bronze",
+        "reliabilityLevel": "Silver",
         "upgradeMode": "Automatic",
         "vmImage": "Windows"
       },
-      "tags": {
-        "resourceType": "Service Fabric",
-        "clusterName": "[parameters('clusterName')]"
-      }
+      "dependsOn": [
+        "[concat('Microsoft.Storage/storageAccounts/', variables('supportLogStorageAccountName'))]"
+      ]
     }
   ],
   "outputs": {
     "clusterProperties": {
-      "value": "[reference(parameters('clusterName'))]",
-      "type": "object"
+      "type": "Object",
+      "value": "[reference(parameters('clusterName'))]"
     }
   }
 }
