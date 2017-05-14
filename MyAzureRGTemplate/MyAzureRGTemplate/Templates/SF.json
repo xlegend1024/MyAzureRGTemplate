@@ -31,25 +31,29 @@
       "type": "string",
       "defaultValue": "MicrosoftWindowsServer",
       "metadata": {
-      "description": "VM image Publisher"}
+        "description": "VM image Publisher"
+      }
     },
     "vmImageOffer": {
       "type": "string",
       "defaultValue": "WindowsServer",
       "metadata": {
-      "description": "VM image offer"}
+        "description": "VM image offer"
+      }
     },
     "vmImageSku": {
       "type": "string",
-      "defaultValue": "2012-R2-Datacenter",
+      "defaultValue": "2016-Datacenter",
       "metadata": {
-      "description": "VM image SKU"}
+        "description": "VM image SKU"
+      }
     },
     "vmImageVersion": {
       "type": "string",
       "defaultValue": "latest",
       "metadata": {
-      "description": "VM image version"}
+        "description": "VM image version"
+      }
     },
     "loadBalancedAppPort1": {
       "type": "int",
@@ -144,6 +148,9 @@
       "metadata": {
         "description": "Instance count for node type"
       }
+    },
+    "applicationInsightsKey": {
+      "type": "string"
     }
   },
   "variables": {
@@ -186,7 +193,7 @@
     "lbHttpProbeID0": "[concat(variables('lbID0'),'/probes/FabricHttpGatewayProbe')]",
     "lbNatPoolID0": "[concat(variables('lbID0'),'/inboundNatPools/LoadBalancerBEAddressNatPool')]",
     "vmNodeType0Name": "[toLower(concat('NT1', variables('vmName')))]",
-    "vmNodeType0Size": "Standard_D2",
+    "vmNodeType0Size": "Standard_A1_v2",
     "vmStorageAccountName0": "[toLower(concat(uniqueString(resourceGroup().id), '1', '0' ))]",
     "uniqueStringArray0": [
       "[concat(variables('vmStorageAccountName0'), '0')]",
@@ -514,6 +521,7 @@
                     "WadCfg": {
                       "DiagnosticMonitorConfiguration": {
                         "overallQuotaInMB": "50000",
+                        "sinks": "applicationInsights",
                         "EtwProviders": {
                           "EtwEventSourceProviderConfiguration": [
                             {
@@ -544,8 +552,18 @@
                             }
                           ]
                         }
-                      }
-                    },
+                      },
+
+                      "SinksConfig": {
+                        "Sink": [
+                          {
+                            "name": "applicationInsights",
+                            "ApplicationInsights": "[parameters('applicationInsightsKey')]"
+                          }
+                        ]
+                      
+                    }
+                  },
                     "StorageAccount": "[variables('applicationDiagnosticsStorageAccountName')]"
                   },
                   "typeHandlerVersion": "1.5"
@@ -687,7 +705,7 @@
           }
         ],
         "provisioningState": "Default",
-        "reliabilityLevel": "Silver",
+        "reliabilityLevel": "Bronze",
         "upgradeMode": "Automatic",
         "vmImage": "Windows"
       },
