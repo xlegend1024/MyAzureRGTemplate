@@ -3,15 +3,15 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "vmssname": { "value": "julee" },
-    "instancecount": { "value": 2 },
+    "NoVMSS": { "value": 1 },
+    "instanceCountPerVMSS": {"value": 2},
     "vmsize": { "value": "Standard_A1_v2" },
     "adminusername": { "value": "julee" },
     "adminpassword": { "value": "test1234!@#$" },
-    "imagename": { "value": "vmss-image-windows2016-krsouth" },
-    "imageResourceGroup": {"value": "VM-images"},
+    "imagename": { "value": "vmss-image-windows2016" },
+    "imageResourceGroup": { "value": "VM-images" },
     "vnetName": { "value": "vmsstest-vnet" },
     "subnetname": { "value": "default" },
-    "vnetResourceGroup": {"value": "vmsstest"}
-  
+    "vnetResourceGroup": { "value": "vmsstest" }
   }
 }

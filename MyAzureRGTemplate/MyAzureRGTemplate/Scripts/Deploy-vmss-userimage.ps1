@@ -3,8 +3,8 @@
 #Requires -Module Azure.Storage
 
 Param(
-    [string] $ResourceGroupLocation='koreasouth',
-    [string] $ResourceGroupName = 'vmsst',
+    [string] $ResourceGroupLocation='koreacentral',
+    [string] $ResourceGroupName = 'vmsste',
     [switch] $UploadArtifacts,
     [string] $StorageAccountName,
     [string] $StorageContainerName = $ResourceGroupName.ToLowerInvariant() + '-stageartifacts',
