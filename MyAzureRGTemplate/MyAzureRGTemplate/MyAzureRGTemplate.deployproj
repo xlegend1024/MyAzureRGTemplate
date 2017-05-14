@@ -33,6 +33,7 @@
     </None>
     <Content Include="Scripts\Deploy-vmss-userimage.ps1" />
     <Content Include="Scripts\Deploy-AzureServices.ps1" />
+    <Content Include="Scripts\Deploy-SF.ps1" />
     <Content Include="Scripts\Deploy-WinFTPStandalonevNet.ps1" />
     <Content Include="Scripts\Deploy-MyConsoles.ps1" />
     <Content Include="Scripts\Deploy-AvailabilitySet-debug.ps1" />
@@ -40,10 +41,12 @@
     <Content Include="Templates\AvailabilitySetTemplate.json" />
     <None Include="Scripts\Remove-SharedResource.ps1" />
     <None Include="Scripts\Deploy-SharedResource.ps1" />
+    <None Include="Templates\SF.json" />
     <None Include="Templates\AzureServices - tested.json" />
     <None Include="Templates\AzureServices-param.json" />
     <None Include="Templates\AzureServices.json" />
     <None Include="Templates\MyConsoleVMs.param.json" />
+    <None Include="Templates\SF.parameters.json" />
     <None Include="Templates\vmss-userimage.param.json" />
     <None Include="Templates\vmss-userimage.json" />
     <None Include="Templates\WinFTPStandalonevNetTemplate.param.json" />

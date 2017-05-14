@@ -1,0 +1,14 @@
+﻿{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterLocation": { "value": "koreasouth" },
+    "clusterName": { "value": "sfjulee" },
+    "adminUserName": { "value": "julee" },
+    "adminPassword": { "value": "Passw0rdPassw0rd" },
+    "certificateThumbprint": { "value": "AC79B272E8BA644C7D6F758682F1CF96A0DB377D" },
+    "sourceVaultValue": { "value": "/subscriptions/51e4c1ab-f0d2-4f71-9e86-8e65e3234941/resourceGroups/security-demo/providers/Microsoft.KeyVault/vaults/kvjuleekrsouth" },
+    "certificateUrlValue": { "value": "https://kvjuleekrsouth.vault.azure.net:443/secrets/sfjuleekrsouth/0ea217b1764f477382d1b8bb7d1222b1" },
+    "nt0InstanceCount": {"value": 3}
+  }
+}
