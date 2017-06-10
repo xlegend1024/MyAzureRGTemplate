@@ -3,3 +3,4 @@
 ################################################################################
 
 /MyAzureRGTemplate/MultipleVMs/bin/Debug/staging/MultipleVMs/azuredeploy.parameters.json
+/MyAzureRGTemplate/MultipleVMsWithScripts/bin/Debug/staging/MultipleVMsWithScripts/azuredeploy.parameters.json

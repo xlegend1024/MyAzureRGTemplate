@@ -2,16 +2,16 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "vmssname": { "value": "julee" },
+    "vmssname": { "value": "vm" },
     "NoVMSS": { "value": 1 },
-    "instanceCountPerVMSS": {"value": 2},
-    "vmsize": { "value": "Standard_A1_v2" },
-    "adminusername": { "value": "julee" },
-    "adminpassword": { "value": "test1234!@#$" },
-    "imagename": { "value": "vmss-image-windows2016" },
-    "imageResourceGroup": { "value": "VM-images" },
-    "vnetName": { "value": "vmsstest-vnet" },
+    "instanceCountPerVMSS": {"value": 50},
+    "vmsize": { "value": "Standard_D2_v2" },
+    "adminusername": { "value": "nexon" },
+    "adminpassword": { "value": "P@ssw0rd1234" },
+    "imagename": { "value": "image" },
+    "imageResourceGroup": { "value": "image" },
+    "vnetName": { "value": "newgs5-vnet" },
     "subnetname": { "value": "default" },
-    "vnetResourceGroup": { "value": "vmsstest" }
+    "vnetResourceGroup": { "value": "newgs5" }
   }
 }
