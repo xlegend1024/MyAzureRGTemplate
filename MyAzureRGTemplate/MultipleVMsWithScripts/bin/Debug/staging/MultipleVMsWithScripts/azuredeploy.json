@@ -112,7 +112,7 @@
       "defaultValue": "Standard_F1"
     },
     "scriptURI": {
-      "defaultvalue": "https://raw.githubusercontent.com/eissi/MyAzureRGTemplate/master/MyAzureRGTemplate/MultipleVMsWithScripts/Script.ps1",
+      "defaultValue": "https://raw.githubusercontent.com/eissi/MyAzureRGTemplate/master/MyAzureRGTemplate/MultipleVMsWithScripts/Script.ps1",
       "type":"string"
     }
 
@@ -142,16 +142,20 @@
     },
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('vm name prefix'),'/installcustomscript')]",
-      "apiVersion": "2017-05-10",
+      "name": "[concat(parameters('vm name prefix'),copyIndex(1),'/CustomScriptExtension')]",
+      "apiVersion": "2017-03-30",
       "location": "[parameters('location')]",
+      "copy": {
+        "name": "VM copy",
+        "count": "[parameters('Number of VMs')]"
+      },
       "dependsOn": [
         "vm-deployment"
       ],
       "properties": {
-        "publisher": "Microsoft.Azure.Extensions",
-        "type": "CustomScript",
-        "typeHandlerVersion": "2.0",
+        "publisher": "Microsoft.Compute",
+        "type": "CustomScriptExtension",
+        "typeHandlerVersion": "1.7",
         "autoUpgradeMinorVersion": true,
         "settings": {
           "fileUris": [
