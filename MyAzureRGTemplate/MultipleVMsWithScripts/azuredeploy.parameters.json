@@ -4,6 +4,9 @@
   "parameters": {
     "vmAdminPassword": {
       "value": "Passw0rdPassw0rd"
+    },
+    "VM Size": {
+      "value": "Standard_F8"
     }
   }
 }

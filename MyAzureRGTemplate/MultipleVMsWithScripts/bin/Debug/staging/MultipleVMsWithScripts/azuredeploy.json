@@ -110,6 +110,10 @@
         "Standard_A8_v2"
       ],
       "defaultValue": "Standard_F1"
+    },
+    "scriptURI": {
+      "defaultvalue": "https://raw.githubusercontent.com/eissi/MyAzureRGTemplate/master/MyAzureRGTemplate/MultipleVMsWithScripts/Script.ps1",
+      "type":"string"
     }
 
   },
@@ -117,7 +121,7 @@
   "resources": [
     {
       "apiVersion": "2016-07-01",
-      "name": "linkedTemplate",
+      "name": "vm-deployment",
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "incremental",
@@ -132,10 +136,32 @@
           "Location": { "value": "[parameters('Location')]" },
           "vmAdminUserName": { "value": "[parameters('vmAdminUserName')]" },
           "vmAdminPassword": { "value": "[parameters('vmAdminPassword')]" },
-          "VM size": {"value": "[parameters('VM Size')]"}
+          "VM size": { "value": "[parameters('VM Size')]" }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('vm name prefix'),'/installcustomscript')]",
+      "apiVersion": "2017-05-10",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "vm-deployment"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Azure.Extensions",
+        "type": "CustomScript",
+        "typeHandlerVersion": "2.0",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": [
+            "[parameters('scriptURI')]"
+          ],
+          "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File Script.ps1"
         }
       }
     }
+
   ],
   "outputs": {}
 }
