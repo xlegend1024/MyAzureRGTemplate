@@ -136,7 +136,8 @@
           "Location": { "value": "[parameters('Location')]" },
           "vmAdminUserName": { "value": "[parameters('vmAdminUserName')]" },
           "vmAdminPassword": { "value": "[parameters('vmAdminPassword')]" },
-          "VM size": { "value": "[parameters('VM Size')]" }
+          "VM size": { "value": "[parameters('VM Size')]" },
+          "vmWindowsOSVersion": {"value": "[parameters('vmWindowsOSVersion')]"}
         }
       }
     },

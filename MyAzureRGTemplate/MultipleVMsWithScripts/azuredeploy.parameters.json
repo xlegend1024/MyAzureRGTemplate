@@ -6,7 +6,13 @@
       "value": "Passw0rdPassw0rd"
     },
     "VM Size": {
-      "value": "Standard_F8"
+      "value": "Standard_D15_v2"
+    },
+    "Location": {
+      "value": "koreasouth"
+    },
+    "vmWindowsOSVersion": {
+      "value": "2016-Datacenter"
     }
   }
 }

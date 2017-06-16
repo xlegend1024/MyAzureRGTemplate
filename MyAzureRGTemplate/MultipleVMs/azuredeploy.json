@@ -93,7 +93,7 @@
             }
           }
         ],
-        "enableAcceleratedNetworking": "[variables('acceleratedNetwork')]"
+        "enableAcceleratedNetworking": false
       },
       "copy": {
         "name": "NIC copy",
