@@ -1,0 +1,172 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "VM Name Prefix": {
+      "type": "string",
+      "defaultValue": "vm"
+    },
+    "Number of VMs": {
+      "type": "int",
+      "defaultValue": 2
+    },
+    "Virtual Network": {
+      "type": "string",
+      "defaultValue": "vnet"
+    },
+
+
+    "Location": {
+      "type": "string",
+      "allowedvalues": [ "eastasia", "southeastasia", "centralus", "eastus", "eastus2", "westus", "northcentralus", "southcentralus", "northeurope", "westeurope", "japanwest", "japaneast", "brazilsouth", "australiaeast", "australiasoutheast", "southindia", "centralindia", "westindia", "canadacentral", "canadaeast", "uksouth", "ukwest", "westcentralus", "westus2", "koreacentral", "koreasouth" ],
+      "defaultValue": "koreasouth"
+    },
+    "vmAdminUserName": {
+      "type": "string",
+      "defaultValue": "julee"
+    },
+    "vmAdminPassword": {
+      "type": "securestring"
+    },
+    "vmWindowsOSVersion": {
+      "type": "string",
+      "defaultValue": "2016-Datacenter-smalldisk",
+      "allowedValues": [
+        "2008-R2-SP1",
+        "2012-Datacenter",
+        "2012-R2-Datacenter",
+        "2016-Datacenter",
+        "2016-Datacenter-smalldisk"
+      ]
+    },
+    "VM Size": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_DS1_v2",
+        "Standard_DS2_v2",
+        "Standard_DS3_v2",
+        "Standard_DS4_v2",
+        "Standard_DS5_v2",
+        "Standard_DS11_v2",
+        "Standard_DS12_v2",
+        "Standard_DS13_v2",
+        "Standard_DS14_v2",
+        "Standard_DS15_v2",
+        "Standard_DS2_v2_Promo",
+        "Standard_DS3_v2_Promo",
+        "Standard_DS4_v2_Promo",
+        "Standard_DS5_v2_Promo",
+        "Standard_DS11_v2_Promo",
+        "Standard_DS12_v2_Promo",
+        "Standard_DS13_v2_Promo",
+        "Standard_DS14_v2_Promo",
+        "Standard_F1s",
+        "Standard_F2s",
+        "Standard_F4s",
+        "Standard_F8s",
+        "Standard_F16s",
+        "Standard_A0",
+        "Standard_A1",
+        "Standard_A2",
+        "Standard_A3",
+        "Standard_A5",
+        "Standard_A4",
+        "Standard_A6",
+        "Standard_A7",
+        "Basic_A0",
+        "Basic_A1",
+        "Basic_A2",
+        "Basic_A3",
+        "Basic_A4",
+        "Standard_D1_v2",
+        "Standard_D2_v2",
+        "Standard_D3_v2",
+        "Standard_D4_v2",
+        "Standard_D5_v2",
+        "Standard_D11_v2",
+        "Standard_D12_v2",
+        "Standard_D13_v2",
+        "Standard_D14_v2",
+        "Standard_D15_v2",
+        "Standard_D2_v2_Promo",
+        "Standard_D3_v2_Promo",
+        "Standard_D4_v2_Promo",
+        "Standard_D5_v2_Promo",
+        "Standard_D11_v2_Promo",
+        "Standard_D12_v2_Promo",
+        "Standard_D13_v2_Promo",
+        "Standard_D14_v2_Promo",
+        "Standard_F1",
+        "Standard_F2",
+        "Standard_F4",
+        "Standard_F8",
+        "Standard_F16",
+        "Standard_A1_v2",
+        "Standard_A2m_v2",
+        "Standard_A2_v2",
+        "Standard_A4m_v2",
+        "Standard_A4_v2",
+        "Standard_A8m_v2",
+        "Standard_A8_v2"
+      ],
+      "defaultValue": "Standard_F1"
+    },
+    "scriptURI": {
+      "defaultValue": "https://raw.githubusercontent.com/eissi/MyAzureRGTemplate/master/MyAzureRGTemplate/MultipleVMsWithScripts/Script.ps1",
+      "type":"string"
+    }
+
+  },
+  "variables": {},
+  "resources": [
+    {
+      "apiVersion": "2016-07-01",
+      "name": "vm-deployment",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/eissi/MyAzureRGTemplate/master/MyAzureRGTemplate/MultipleVMs/azuredeploy.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "VM Name Prefix": { "value": "[parameters('VM Name Prefix')]" },
+          "Number of VMs": { "value": "[parameters('Number of VMs')]" },
+          "virtual network": { "value": "[parameters('Virtual Network')]" },
+          "Location": { "value": "[parameters('Location')]" },
+          "vmAdminUserName": { "value": "[parameters('vmAdminUserName')]" },
+          "vmAdminPassword": { "value": "[parameters('vmAdminPassword')]" },
+          "VM size": { "value": "[parameters('VM Size')]" },
+          "vmWindowsOSVersion": {"value": "[parameters('vmWindowsOSVersion')]"}
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('vm name prefix'),copyIndex(1),'/CustomScriptExtension')]",
+      "apiVersion": "2017-03-30",
+      "location": "[parameters('location')]",
+      "copy": {
+        "name": "VM copy",
+        "count": "[parameters('Number of VMs')]"
+      },
+      "dependsOn": [
+        "vm-deployment"
+      ],
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "CustomScriptExtension",
+        "typeHandlerVersion": "1.7",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "fileUris": [
+            "[parameters('scriptURI')]"
+          ],
+          "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File Script.ps1"
+        }
+      }
+    }
+
+  ],
+  "outputs": {}
+}

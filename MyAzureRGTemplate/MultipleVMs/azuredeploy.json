@@ -1,0 +1,223 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "VM Name Prefix": {
+      "type": "string",
+      "defaultValue": "vm"
+    },
+    "Number of VMs": {
+      "type": "int",
+      "defaultValue": 2
+    },
+    "Virtual Network": {
+      "type": "string",
+      "defaultValue": "vnet"
+    },
+
+
+    "Location": {
+      "type": "string",
+      "allowedvalues": [ "eastasia", "southeastasia", "centralus", "eastus", "eastus2", "westus", "northcentralus", "southcentralus", "northeurope", "westeurope", "japanwest", "japaneast", "brazilsouth", "australiaeast", "australiasoutheast", "southindia", "centralindia", "westindia", "canadacentral", "canadaeast", "uksouth", "ukwest", "westcentralus", "westus2", "koreacentral", "koreasouth" ],
+      "defaultValue": "koreasouth"
+    },
+    "vmAdminUserName": {
+      "type": "string",
+      "defaultValue": "julee"
+    },
+    "vmAdminPassword": {
+      "type": "securestring"
+    },
+    "vmWindowsOSVersion": {
+      "type": "string",
+      "defaultValue": "2016-Datacenter-smalldisk",
+      "allowedValues": [
+        "2008-R2-SP1",
+        "2012-Datacenter",
+        "2012-R2-Datacenter",
+        "2016-Datacenter",
+        "2016-Datacenter-smalldisk"
+      ]
+    },
+    "VM Size": {
+      "type": "string",
+      "allowedValues": [
+"Standard_DS1_v2","Standard_DS2_v2","Standard_DS3_v2","Standard_DS4_v2","Standard_DS5_v2","Standard_DS11_v2","Standard_DS12_v2","Standard_DS13_v2","Standard_DS14_v2","Standard_DS15_v2","Standard_DS2_v2_Promo","Standard_DS3_v2_Promo","Standard_DS4_v2_Promo","Standard_DS5_v2_Promo","Standard_DS11_v2_Promo","Standard_DS12_v2_Promo","Standard_DS13_v2_Promo","Standard_DS14_v2_Promo","Standard_F1s","Standard_F2s","Standard_F4s","Standard_F8s","Standard_F16s","Standard_A0","Standard_A1","Standard_A2","Standard_A3","Standard_A5","Standard_A4","Standard_A6","Standard_A7","Basic_A0","Basic_A1","Basic_A2","Basic_A3","Basic_A4","Standard_D1_v2","Standard_D2_v2","Standard_D3_v2","Standard_D4_v2","Standard_D5_v2","Standard_D11_v2","Standard_D12_v2","Standard_D13_v2","Standard_D14_v2","Standard_D15_v2","Standard_D2_v2_Promo","Standard_D3_v2_Promo","Standard_D4_v2_Promo","Standard_D5_v2_Promo","Standard_D11_v2_Promo","Standard_D12_v2_Promo","Standard_D13_v2_Promo","Standard_D14_v2_Promo","Standard_F1","Standard_F2","Standard_F4","Standard_F8","Standard_F16","Standard_A1_v2","Standard_A2m_v2","Standard_A2_v2","Standard_A4m_v2","Standard_A4_v2","Standard_A8m_v2","Standard_A8_v2"
+      ],
+      "defaultValue": "Standard_F1"
+    }
+
+  },
+  "variables": {
+
+
+    "diag-storage-account": "[uniqueString(resourceGroup().name)]",
+
+    "acceleratedVMSize": [ "Standard_DS4_v2", "Standard_DS5_v2", "Standard_DS13_v2", "Standard_DS14_v2", "Standard_DS15_v2", "Standard_DS4_v2_Promo", "Standard_DS5_v2_Promo", "Standard_DS13_v2_Promo", "Standard_DS14_v2_Promo", "Standard_F8s", "Standard_F16s", "Standard_D4_v2", "Standard_D5_v2", "Standard_D13_v2", "Standard_D14_v2", "Standard_D15_v2", "Standard_D4_v2_Promo", "Standard_D5_v2_Promo", "Standard_D13_v2_Promo", "Standard_D14_v2_Promo", "Standard_F8", "Standard_F16"],
+    "acceleratedNetwork": "[contains(variables('acceleratedVMSize'), parameters('vm size'))]",
+
+    "vmImagePublisher": "MicrosoftWindowsServer",
+    "vmImageOffer": "WindowsServer",
+    "vmOSDiskName": "vmOSDisk",
+    "apiVersion": "2017-04-01",
+
+    "vnetPrefix": "10.0.0.0/16",
+    "vnetSubnet1Name": "Subnet-1",
+    "vnetSubnet1Prefix": "10.0.0.0/24"
+
+
+  },
+  "resources": [
+
+    {
+      "name": "[concat(parameters('VM Name Prefix'),copyindex(1))]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2017-04-01",
+      "tags": {
+        "displayName": "[parameters('VM Name Prefix')]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks',parameters('virtual network')),'/subnets/',variables('vnetSubnet1Name'))]"
+
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('VM Name Prefix'),copyindex(1)))]"
+              }
+            }
+          }
+        ],
+        "enableAcceleratedNetworking": false
+      },
+      "copy": {
+        "name": "NIC copy",
+        "count": "[parameters('Number of VMs')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', parameters('vm name prefix'),copyindex(1))]",
+        "[concat('Microsoft.Network/virtualNetworks/',parameters('Virtual Network'))]"
+      ]
+
+    },
+    {
+      "name": "[parameters('VM Name Prefix')]",
+      "type": "Microsoft.Compute/availabilitySets",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2017-03-30",
+      "dependsOn": [],
+      "properties": {
+        "platformUpdateDomainCount": 20,
+        "platformFaultDomainCount": 2,
+        "virtualMachines": []
+      },
+      "tags": {
+        "displayName": "[parameters('VM Name Prefix')]"
+      },
+      "sku": {
+        "name": "aligned"
+      }
+    },
+    {
+      "name": "[concat(parameters('VM Name Prefix'),copyindex(1))]",
+      "copy": {
+        "name": "VM copy",
+        "count": "[parameters('Number of VMs')]"
+      },
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[parameters('Location')]",
+      "apiVersion": "2016-04-30-preview",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', concat(parameters('VM Name Prefix'),copyindex(1)))]",
+        "[concat('Microsoft.Compute/availabilitySets/', parameters('VM Name Prefix'))]"
+      ],
+      "tags": {
+        "displayName": "[parameters('VM Name Prefix')]"
+      },
+
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', concat(parameters('VM Name Prefix')))]"
+        },
+
+        "hardwareProfile": {
+          "vmSize": "[parameters('VM Size')]"
+        },
+        "osProfile": {
+          "computername": "[concat(parameters('VM Name Prefix'),copyindex(1))]",
+          "adminUsername": "[parameters('vmAdminUsername')]",
+          "adminPassword": "[parameters('vmAdminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('vmImagePublisher')]",
+            "offer": "[variables('vmImageOffer')]",
+            "sku": "[parameters('vmWindowsOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "fromImage",
+            "managedDisk": {
+              "storageAccountType": "Standard_LRS"
+            }
+          },
+          "dataDisks": []
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('VM Name Prefix'),copyindex(1)))]"
+            }
+          ]
+        }
+
+      }
+    },
+    {
+      "apiVersion": "2017-04-01",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[concat(parameters('VM Name Prefix'), copyIndex(1))]",
+      "location": "[parameters('location')]",
+      "copy": {
+        "name": "publicIPLoop",
+        "count": "[parameters('number of VMs')]"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "name": "vnet",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[parameters('location')]",
+      "apiVersion": "2016-03-30",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "vnet"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('vnetPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('vnetSubnet1Name')]",
+            "properties": {
+              "addressPrefix": "[variables('vnetSubnet1Prefix')]"
+            }
+          }
+        ]
+      }
+    }
+
+  ],
+  "outputs": {
+  }
+}
